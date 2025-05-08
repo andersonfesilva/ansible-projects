@@ -1,0 +1,20 @@
+- name: Criar diretório de log com permissões específicas
+  ansible.builtin.file:
+    path: /var/log/myapp
+    state: directory      # Garante que o caminho é um diretório
+    owner: myapp_user
+    group: myapp_group
+    mode: '0770'
+
+- name: Garantir que um arquivo de configuração existe (mesmo que vazio)
+  ansible.builtin.file:
+    path: /etc/myapp/config.ini
+    state: touch          # Cria o arquivo se não existir, atualiza o timestamp se existir
+    mode: '0600'
+    owner: root
+    group: root
+
+- name: Remover um arquivo antigo
+  ansible.builtin.file:
+    path: /tmp/old_backup.tar.gz
+    state: absent         # Garante que o arquivo não existe

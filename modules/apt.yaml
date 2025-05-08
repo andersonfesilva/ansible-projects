@@ -1,0 +1,8 @@
+- name: Instalar pacotes essenciais com apt
+  ansible.builtin.apt:
+    name:
+      - vim
+      - curl
+      - htop
+    state: present      # Garante que os pacotes estão instalados
+    update_cache: yes   # Executa 'apt-get update' antes de instalar

@@ -1,0 +1,4 @@
+- name: Instalar o servidor web Apache com yum
+  ansible.builtin.yum:
+    name: httpd
+    state: latest       # Garante que a última versão do pacote está instalada

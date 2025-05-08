@@ -1,0 +1,7 @@
+- name: Copiar arquivo de configuração do aplicativo
+  ansible.builtin.copy:
+    src: files/app.conf  # Caminho para o arquivo no nó de controle (relativo ao playbook ou um caminho absoluto)
+    dest: /etc/myapp/app.conf # Caminho de destino no nó gerenciado
+    owner: root
+    group: root
+    mode: '0644'         # Define as permissões do arquivo

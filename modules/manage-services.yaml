@@ -1,0 +1,13 @@
+- name: Garantir que o serviço Nginx esteja iniciado e habilitado
+  ansible.builtin.service:
+    name: nginx
+    state: started   # Pode ser 'started', 'stopped', 'restarted', 'reloaded'
+    enabled: yes     # Garante que o serviço inicie no boot
+
+# Exemplo alternativo usando o módulo systemd para maior controle
+- name: Reiniciar o serviço cron e garantir que está habilitado
+  ansible.builtin.systemd:
+    name: cron
+    state: restarted
+    enabled: yes
+    daemon_reload: yes # Recarrega a configuração do systemd, útil após modificar arquivos de unidade

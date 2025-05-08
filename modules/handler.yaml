@@ -1,0 +1,33 @@
+---
+- name: Configurar e gerenciar servidor web Apache
+  hosts: webservers
+  become: yes
+  tasks:
+    - name: Instalar Apache
+      ansible.builtin.apt:
+        name: apache2
+        state: present
+
+    - name: Copiar arquivo de configuração principal do Apache
+      ansible.builtin.template:
+        src: templates/apache2.conf.j2
+        dest: /etc/apache2/apache2.conf
+      notify: Reiniciar Apache  # Notifica o handler se o template causar uma mudança
+
+    - name: Copiar arquivo de configuração do virtual host
+      ansible.builtin.template:
+        src: templates/myvhost.conf.j2
+        dest: /etc/apache2/sites-available/myvhost.conf
+      notify: Reiniciar Apache  # Também notifica o mesmo handler
+
+    - name: Habilitar o novo site
+      ansible.builtin.command: a2ensite myvhost.conf
+      args:
+        creates: /etc/apache2/sites-enabled/myhost.conf # Evita executar se o link já existir
+      notify: Reiniciar Apache
+
+  handlers:
+    - name: Reiniciar Apache
+      ansible.builtin.service:
+        name: apache2
+        state: restarted

@@ -1,0 +1,4 @@
+- name: Remover o pacote 'telnet' com dnf
+  ansible.builtin.dnf:
+    name: telnet
+    state: absent       # Garante que o pacote está removido

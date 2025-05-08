@@ -1,0 +1,46 @@
+- name: Configure and start a web server Nginx
+  hosts: webservers
+  become: yes
+  
+  vars:
+    nginx_port: 8080
+  
+  tasks:
+    - name: Install Nginx
+      ansible.builtin.apt:  # Module to manager debian packages
+        name: nginx
+        state: present    # Ensure Nginx is installed
+        update_cache: yes # Update the apt cache before installing
+  
+    - name: Create directory for web site
+      ansible.builtin.file:
+        path: /var/www/my_website
+        state: directory  # Ensure the directory exists
+        mode: '0755'
+
+    - name: Copy configuration file for Nginx
+      ansible.builtin.template:
+        src: templates/nginx.conf.j2  # Path to the Jinja2 template
+        dest: /etc/nginx/sites-available/my_website  # Destination path
+      notify:  # Notify handler to restart Nginx if this task changes
+        - Restart Nginx
+
+    - name: Enable site configuration
+      ansible.builtin.file:
+        src: /etc/nginx/sites-available/my_website
+        dest: /etc/nginx/sites-enabled/my_website
+        state: link  # Create a symbolic link to enable the site
+      notify:  # Notify handler to restart Nginx if this task changes
+        - Restart Nginx
+
+    - name: Start Nginx service
+      ansible.builtin.service:
+        name: nginx
+        state: started  # Ensure the Nginx service is started
+        enabled: yes    # Ensure Nginx starts on boot
+
+  handlers:
+    - name: Restart Nginx
+      ansible.builtin.service:
+        name: nginx
+        state: restarted  # Restart the Nginx service

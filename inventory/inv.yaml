@@ -1,0 +1,13 @@
+all:
+  children:
+    webservers:
+      hosts:
+        web1.example.com:
+        192.168.1.10:
+    dbservers:
+      hosts:
+        db1.example.com:
+    datacentera:
+      hosts:
+        web1.example.com:
+        db1.example.com:
